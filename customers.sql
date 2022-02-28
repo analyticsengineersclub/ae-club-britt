@@ -1,5 +1,19 @@
-SELECT c.id, c.name, c.email, o.created_at, o.total AS number_of_orders
-FROM analytics-engineers-club.coffee_shop.customers AS c
-JOIN analytics-engineers-club.coffee_shop.orders AS o
-ON c.id = o.customer_id
-ORDER BY created_at limit 20;
+with customer_orders as (
+    select
+        customer_id,
+        count(*) as number_of_orders,
+        min(created_at) as first_order_at
+    from 'analytics-engineers-club.coffee_shop_orders'
+    group by 1
+)
+
+select
+    customers.id as customer_id,
+    customers.name,
+    customers.email,
+    coalesce(customer_orders.number_of_orders,  0) as number_of_orders,
+    customer_orders.first_order_at
+from 'analytics-engineers-club.coffee_shop_customers' as customers
+left join customer_orders  
+    on customers.id = customer_orders.customer_id
+limit 5;
