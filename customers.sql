@@ -1,12 +1,18 @@
+with cust_orders as (
+      select
+            customer_id
+            , count(*) as number_of_orders
+            , min(created_at) as first_order_at
+      from `analytics-engineers-club.coffee_shop.orders`
+      group by 1
+)
 select 
-      orders.customer_id
+      customers.id as customer_id
       , customers.name
       , customers.email
-      , min(orders.created_at) first_order_at
-      , count(orders.id) number_of_orders
-from analytics-engineers-club.coffee_shop.customers
-join analytics-engineers-club.coffee_shop.orders
-on orders.customer_id = customers.id
-group by 1, 2, 3
-order by first_order_at
-limit 5
+      , cust_orders.first_order_at
+      , cust_orders.number_of_orders
+from `analytics-engineers-club.coffee_shop.customers` as customers
+left join cust_orders
+      on customers.id = cust_orders.customer_id
+order by 5
