@@ -1,0 +1,11 @@
+version: 2
+
+models:
+  - name: monthly_customers
+    description: '{{ doc("table_monthly_customers") }}'
+    columns:
+      - name: new_customers
+        description: Primary key of the model
+        tests:
+          - unique
+          - not_null
