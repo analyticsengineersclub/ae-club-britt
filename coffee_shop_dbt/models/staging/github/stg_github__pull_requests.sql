@@ -14,7 +14,7 @@ renamed as (
         base_repo_id,
         base_sha,
         base_user_id,
-        draft,
+        is_draft,
         head_label,
         head_ref,
         head_repo_id,
